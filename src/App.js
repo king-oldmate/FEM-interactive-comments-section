@@ -4,7 +4,7 @@ import data from "./data.json";
 function App() {
   const { user, comments } = data;
   return (
-    <div className='text-3xl'>
+    <div className=''>
       {comments.map((comment) => {
         return <Post comment={comment} />;
       })}
