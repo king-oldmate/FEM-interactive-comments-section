@@ -4,7 +4,9 @@ import reply from "./images/icon-reply.svg";
 import plus from "./images/icon-plus.svg";
 import minus from "./images/icon-minus.svg";
 
-const Post = ({ comment, currentUsername }) => {
+import Reply from "./Reply";
+
+const Post = ({ comment, currentUsername, currentUserImage }) => {
   const { id, content, createdAt, score, user, replies } = comment;
   const { image, username } = user;
   const { png, webp } = image;
@@ -88,41 +90,18 @@ const Post = ({ comment, currentUsername }) => {
       });
     }
   };
-  //   const addVote = () => {
-  //     if (voteRecord.indexOf(currentUsername) === -1) {
-  //       let updatedVote = upvotes + 1;
-  //       setUpvotes(updatedVote);
-  //       setUpvoteRecord([...upvoteRecord, currentUsername]);
-  //     } else {
-  //       let updatedVote = upvotes - 1;
-  //       setUpvotes(updatedVote);
-  //       let updatedVoteRecord = voteRecord.filter(
-  //         (name) => name !== currentUsername
-  //       );
-  //       setVoteRecord(updatedVoteRecord);
-  //     }
-  //   };
 
-  //   const downVote = () => {
-  //     if (voteRecord.indexOf(currentUsername) === -1) {
-  //       let updatedVote = upvotes - 1;
-  //       setUpvotes(updatedVote);
-  //       setVoteRecord([...voteRecord, currentUsername]);
-  //     } else {
-  //       let updatedVote = upvotes + 1;
-  //       setUpvotes(updatedVote);
-  //       let updatedVoteRecord = voteRecord.filter(
-  //         (name) => name !== currentUsername
-  //       );
-  //       setVoteRecord(updatedVoteRecord);
-  //     }
-  //   };
+  const [replyOpen, setReplyOpen] = useState(true);
 
   return (
     <>
-      <article key={id} className='bg-white m-4 rounded-lg p-4 '>
+      <article key={id} className='bg-white mx-4 my-2 rounded-lg p-4 '>
         <div>
-          <img src={webp} alt={`${username} profile`} />
+          <img
+            src={webp}
+            alt={`${username} profile`}
+            className='profile-picture'
+          />
           <h6>{username}</h6>
           <p>{createdAt}</p>
         </div>
@@ -145,10 +124,20 @@ const Post = ({ comment, currentUsername }) => {
         replies.map((reply, index) => {
           return (
             <div className='border-light-gray border-l-2 ml-4' key={index}>
-              <Post comment={reply} />
+              <Post
+                comment={reply}
+                currentUsername={currentUsername}
+                currentUserImage={currentUserImage}
+              />
             </div>
           );
         })}
+      {replyOpen && (
+        <Reply
+          currentUsername={currentUsername}
+          currentUserImage={currentUserImage}
+        />
+      )}
     </>
   );
 };

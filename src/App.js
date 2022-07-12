@@ -4,10 +4,17 @@ import data from "./data.json";
 function App() {
   const { currentUser, comments } = data;
   const { image, username } = currentUser;
+  const currentUserImage = image.png;
   return (
     <div className=''>
       {comments.map((comment) => {
-        return <Post comment={comment} currentUsername={username} />;
+        return (
+          <Post
+            comment={comment}
+            currentUsername={username}
+            currentUserImage={currentUserImage}
+          />
+        );
       })}
     </div>
   );
