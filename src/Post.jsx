@@ -4,22 +4,119 @@ import reply from "./images/icon-reply.svg";
 import plus from "./images/icon-plus.svg";
 import minus from "./images/icon-minus.svg";
 
-const Post = ({ comment }) => {
+const Post = ({ comment, currentUsername }) => {
   const { id, content, createdAt, score, user, replies } = comment;
   const { image, username } = user;
   const { png, webp } = image;
 
-  const [upvotes, setUpvotes] = useState(score);
+  const [votes, setVotes] = useState(score);
+  const [voteRecord, setVoteRecord] = useState({
+    up: [],
+    down: [],
+  });
 
   const addVote = () => {
-    let updatedVote = upvotes + 1;
-    setUpvotes(updatedVote);
+    if (
+      voteRecord["up"].indexOf(currentUsername) === -1 &&
+      voteRecord["down"].indexOf(currentUsername) === -1
+    ) {
+      let updatedVote = votes + 1;
+      setVotes(updatedVote);
+      setVoteRecord({
+        up: [...voteRecord["up"], currentUsername],
+        down: [...voteRecord["down"]],
+      });
+    } else if (
+      voteRecord["up"].indexOf(currentUsername) === -1 &&
+      voteRecord["down"].indexOf(currentUsername) > -1
+    ) {
+      let newDownVoteRecord = voteRecord["down"].filter(
+        (name) => name !== currentUsername
+      );
+      let updatedVote = votes + 1;
+      setVotes(updatedVote);
+      setVoteRecord({
+        up: [...voteRecord["up"], currentUsername],
+        down: [...newDownVoteRecord],
+      });
+    } else if (voteRecord["up"].indexOf(currentUsername) > -1) {
+      let updatedVote = votes - 1;
+      setVotes(updatedVote);
+      let newUpVoteRecord = voteRecord["up"].filter(
+        (name) => name !== currentUsername
+      );
+      setVoteRecord({
+        up: [...newUpVoteRecord],
+        down: [...voteRecord["down"]],
+      });
+    }
   };
 
   const downVote = () => {
-    let updatedVote = upvotes - 1;
-    setUpvotes(updatedVote);
+    if (
+      voteRecord["up"].indexOf(currentUsername) === -1 &&
+      voteRecord["down"].indexOf(currentUsername) === -1
+    ) {
+      let updatedVote = votes - 1;
+      setVotes(updatedVote);
+      setVoteRecord({
+        up: [...voteRecord["up"]],
+        down: [...voteRecord["down"], currentUsername],
+      });
+    } else if (
+      voteRecord["up"].indexOf(currentUsername) > -1 &&
+      voteRecord["down"].indexOf(currentUsername) === -1
+    ) {
+      let newUpVoteRecord = voteRecord["up"].filter(
+        (name) => name !== currentUsername
+      );
+      let updatedVote = votes - 1;
+      setVotes(updatedVote);
+      setVoteRecord({
+        up: [...newUpVoteRecord],
+        down: [...voteRecord["down"], currentUsername],
+      });
+    } else if (voteRecord["down"].indexOf(currentUsername) > -1) {
+      let updatedVote = votes + 1;
+      setVotes(updatedVote);
+      let newDownVoteRecord = voteRecord["down"].filter(
+        (name) => name !== currentUsername
+      );
+      setVoteRecord({
+        up: [...voteRecord["up"]],
+        down: [...newDownVoteRecord],
+      });
+    }
   };
+  //   const addVote = () => {
+  //     if (voteRecord.indexOf(currentUsername) === -1) {
+  //       let updatedVote = upvotes + 1;
+  //       setUpvotes(updatedVote);
+  //       setUpvoteRecord([...upvoteRecord, currentUsername]);
+  //     } else {
+  //       let updatedVote = upvotes - 1;
+  //       setUpvotes(updatedVote);
+  //       let updatedVoteRecord = voteRecord.filter(
+  //         (name) => name !== currentUsername
+  //       );
+  //       setVoteRecord(updatedVoteRecord);
+  //     }
+  //   };
+
+  //   const downVote = () => {
+  //     if (voteRecord.indexOf(currentUsername) === -1) {
+  //       let updatedVote = upvotes - 1;
+  //       setUpvotes(updatedVote);
+  //       setVoteRecord([...voteRecord, currentUsername]);
+  //     } else {
+  //       let updatedVote = upvotes + 1;
+  //       setUpvotes(updatedVote);
+  //       let updatedVoteRecord = voteRecord.filter(
+  //         (name) => name !== currentUsername
+  //       );
+  //       setVoteRecord(updatedVoteRecord);
+  //     }
+  //   };
 
   return (
     <>
@@ -34,7 +131,7 @@ const Post = ({ comment }) => {
           <button onClick={() => addVote()}>
             <img src={plus} alt='' />
           </button>
-          {upvotes}
+          {votes}
           <button onClick={() => downVote()}>
             <img src={minus} alt='' />
           </button>
