@@ -6,7 +6,7 @@ function App() {
   const { image, username } = currentUser;
   const currentUserImage = image.png;
   return (
-    <div className=''>
+    <div className='max-w-[732px] mx-auto'>
       {comments.map((comment) => {
         return (
           <Post
