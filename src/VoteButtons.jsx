@@ -2,7 +2,7 @@ import React from "react";
 
 const VoteButtons = ({ votes, addVote, downVote }) => {
   return (
-    <div className='bg-light-gray flex md:flex-col justify-evenly gap-x-4 rounded-lg py-2 px-3 md:py-3 md:gap-y-3 md:justify-center text-moderate-blue text-center'>
+    <div className='bg-light-gray flex md:flex-col justify-evenly gap-x-4 rounded-lg py-2 px-3 md:py-3 md:gap-y-3 md:justify-center items-center text-moderate-blue text-center md:w-[40px] md:px-0'>
       <button
         onClick={() => addVote()}
         className=' hover:fill-moderate-blue fill-light-grayish-blue'

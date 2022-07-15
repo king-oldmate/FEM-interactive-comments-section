@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import Reply from "./Reply";
 import VoteButtons from "./VoteButtons";
+import ReplyButton from "./ReplyButton";
 
 const Post = ({ comment, currentUsername, currentUserImage }) => {
   const { id, content, createdAt, score, user, replies, replyingTo } = comment;
@@ -92,34 +93,33 @@ const Post = ({ comment, currentUsername, currentUserImage }) => {
 
   return (
     <>
-      <article key={id} className='bg-white mx-4 my-2 rounded-lg p-4 space-y-4'>
-        <div className='flex space-x-4 items-center'>
-          <img
-            src={webp}
-            alt={`${username} profile`}
-            className='profile-picture'
-          />
-          <h4 className='font-medium'>{username}</h4>
-          <p className='text-grayish-blue'>{createdAt}</p>
-        </div>
-        <p className='text-grayish-blue'>
-          <span className='font-medium text-moderate-blue'>
-            {replyingTo && `@${replyingTo} `}
-          </span>
-          {content}
-        </p>
-        <div className='flex '>
+      <article key={id} className='bg-white mx-4 my-2 rounded-lg p-4 md:flex'>
+        <div className='hidden md:inline mr-4'>
           <VoteButtons votes={votes} addVote={addVote} downVote={downVote} />
-
-          <button
-            className='flex items-center fill-moderate-blue text-moderate-blue hover:text-light-grayish-blue hover:fill-light-grayish-blue ml-auto gap-x-2 text-sm'
-            onClick={() => setReplyOpen(!replyOpen)}
-          >
-            <svg width='14' height='13' xmlns='http://www.w3.org/2000/svg'>
-              <path d='M.227 4.316 5.04.16a.657.657 0 0 1 1.085.497v2.189c4.392.05 7.875.93 7.875 5.093 0 1.68-1.082 3.344-2.279 4.214-.373.272-.905-.07-.767-.51 1.24-3.964-.588-5.017-4.829-5.078v2.404c0 .566-.664.86-1.085.496L.227 5.31a.657.657 0 0 1 0-.993Z' />
-            </svg>
-            Reply
-          </button>
+        </div>
+        <div className=' space-y-4'>
+          <div className='flex space-x-4 items-center justify-start'>
+            <img
+              src={webp}
+              alt={`${username} profile`}
+              className='profile-picture'
+            />
+            <h4 className='font-medium'>{username}</h4>
+            <p className='text-grayish-blue'>{createdAt}</p>
+            <div className='hidden md:inline  grow justify-self-end'>
+              <ReplyButton replyOpen={replyOpen} setReplyOpen={setReplyOpen} />
+            </div>
+          </div>
+          <p className='text-grayish-blue'>
+            <span className='font-medium text-moderate-blue'>
+              {replyingTo && `@${replyingTo} `}
+            </span>
+            {content}
+          </p>
+        </div>
+        <div className='flex md:hidden mt-4'>
+          <VoteButtons votes={votes} addVote={addVote} downVote={downVote} />
+          <ReplyButton replyOpen={replyOpen} setReplyOpen={setReplyOpen} />
         </div>
       </article>
       {replyOpen && (
